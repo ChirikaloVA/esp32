@@ -1,0 +1,42 @@
+/*
+ * Переменные, используемые для периодического выполнения кода. Первая - это период
+ * в миллисекундах, а вторая - время последнего выполнения кода.
+ */
+unsigned int period_check = 1000;
+unsigned long lastMs_check = 0;
+
+unsigned int period_nextScreen = 5000;
+unsigned long lastMs_nextScreen = 0;
+
+/*
+ * Объекты LiquidLine представляют собой отдельные строки текста и/или переменных
+ * на дисплее. Первые два параметра - это столбец и строка, с которых
+ * строка начинается, остальные параметры - это текст и/или переменные,
+ * которые будут напечатаны на дисплее. Их количество может составлять до четырех.
+ */
+// Здесь строка устанавливается в столбец 1, строку 0, и будут напечатаны
+// переданные строка и переменная.
+LiquidLine welcome_line1(1, 0, "LiquidMenu ", LIQUIDMENU_VERSION);
+// Здесь столбец равен 3, а строка - 1, и строка "Hello Menu".
+LiquidLine welcome_line2(1, 1, "Hello Menu I2C");
+
+/*
+ * Объекты LiquidScreen представляют собой отдельные экраны. Экран формируется
+ * из одного или более объектов LiquidLine. Отсюда может быть вставлено до четырех
+ * объектов LiquidLine, но больше может быть добавлено позже в setup() с помощью
+ * welcome_screen.add_line(someLine_object);.
+ */
+// Здесь два объекта LiquidLine, созданных выше.
+LiquidScreen welcome_screen(welcome_line1, welcome_line2);
+
+// Здесь не только строка текста, но еще и изменяющаяся целочисленная переменная.
+LiquidLine analogReading_line(0, 0, "Analog: ", millis());
+LiquidScreen secondary_screen(analogReading_line);
+
+/*
+ * Объект LiquidMenu объединяет объекты LiquidScreen, чтобы сформировать меню. 
+ * Здесь он только инициализируется, а экраны добавляются позже с помощью
+ * using menu.add_screen(someScreen_object);. Этот объект используется для
+ * управления меню, например: menu.next_screen(), menu.switch_focus()...
+ */
+LiquidMenu menu(lcd);
